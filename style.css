@@ -1,0 +1,51 @@
+body {
+    background-image: url(https://pixelify.nyc3.cdn.digitaloceanspaces.com/wp-content/uploads/2020/06/20112726/runnerdesign_2020-3.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color:rgba(255, 255, 255, 0.5);
+    border: 1px solid;
+    width: auto;
+}
+
+#header-text {
+    text-align: center;
+}
+
+.card {
+    background-color:rgba(255, 255, 255, 0.7);
+    border: 1px solid;
+    padding: 5px;
+    margin-top: 100px;
+    margin-left: 100px;
+}
+
+#newlist-btn {
+    margin-top: 50px;
+    position: relative;
+}
+
+.lijst {
+    border: 1px solid;
+    max-width: 240px;
+    border-radius: 3px;
+    padding: 3px;
+    background-color:rgba(255, 255, 255, 0.7);
+}
+
+.btnnewcontent {
+    border: 1px solid #cccccc;
+    background-color: #cccccc;
+    width: 230px;
+    border-radius: 2px;
+    color: #7a7878;
+}
+
+.newcontent {
+    float: left;
+}
