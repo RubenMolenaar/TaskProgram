@@ -10,7 +10,7 @@ if (isset($_POST['action'])) {
             break;
         case 'newCard':
             $result = newCard();
-            echo $result;
+            echo json_encode($result);
             break;
     }
 }
@@ -31,7 +31,7 @@ function createDatabaseConnection (){
 
 function getCards(){
     $dbconnection = createDatabaseConnection();
-    $stmt = $dbconnection->prepare("SELECT * FROM cards");
+    $stmt = $dbconnection->prepare("SELECT cards.*, states.* FROM cards left join states on cards.State_Id=states.Id");
     $stmt->execute();
     $result = $stmt->fetchAll();
     $dbconnection = NULL;
@@ -47,12 +47,12 @@ function getLists(){
     return $result;
 }
 
-function getCardById(){
+function getCardById($id){
     $dbconnection = createDatabaseConnection();
-    $stmt = $dbconnection->prepare("SELECT * FROM cards Where Id = :id", );
-    $stmt->bindParam(":id", $_POST["id"]);
+    $stmt = $dbconnection->prepare("SELECT cards.*, states.* FROM cards left join states on cards.State_Id=states.Id Where cards.Id = :id LIMIT 1", );
+    $stmt->bindParam(":id", $id);
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    $result = $stmt->fetch();
     $dbconnection = NULL;
     return $result;
 }

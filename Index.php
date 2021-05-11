@@ -20,21 +20,34 @@ include("Database.php");
 </header>
 
             <? 
-                $array = getLists();
+                $lists = getLists();
+                $cards = getCards();
+                
             ?>
+            <div id="lists-div" style="maxwidth: 400px; overflow-x: scroll; display: flex ;">
 
-            <?php foreach($array as $key): ?>
-                <div class="lijst" style="display:inline-block;">
-                    <h5><?= $key['Name']; ?></h5>
-                    <div class="newcontent">
+                <?php foreach($lists as $list): ?>
+                    <div class="lijst" style="display:inline-block;">
+                        <h5><?= $list['Name']; ?></h5>
+                        <div class="newcontent" data-id="<?= $list['Id']?>">
+                        <?foreach($cards as $card):?>
+                            <?php if($card['List_Id'] == $list['Id']): ?>
+                                <div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;">
+                                    <p style="font-weight: bold; text-align: center;"><?= $card['Title'] ?></p>
+                                    <p style="font-weight: bold; text-align: center;"><?= $card['Name'] ?></p>
+                                </div>
+                            <?php endif; ?>
+                        <? endforeach; ?>
+                        </div>
+                        <button data-id="<?= $list['Id'] ?>" type="button" class="btnnewcontent" id="newcard-btn" data-toggle="modal" data-target="#new-card-modal"><i class="fas fa-plus-square"></i> add new content </button>
                     </div>
-                    <button data-id="<?= $key['Id'] ?>" type="button" class="btnnewcontent" id="newcard-btn" data-toggle="modal" data-target="#new-card-modal"><i class="fas fa-plus-square"></i> add new content </button>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
 
-            <button type="button" class="btn btn-primary" id="newlist-btn" data-toggle="modal" data-target="#new-list-modal">
-                click me!
-            </button>
+                <button type="button" class="btn btn-primary" id="newlist-btn" data-toggle="modal" data-target="#new-list-modal">
+                    click me!
+                </button>
+            </div>
+            
 
             <div class="modal fade" id="new-list-modal">
                 <div class="modal-dialog">
@@ -59,13 +72,22 @@ include("Database.php");
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <label for="fname">What is the title of your new list?</label>
+                            <h2 for="fname">Kaart toevoegen</label>
                         </div>
                         <div class="modal-body">
                             <form id="newcard-form">
-                                <input type="text" class="form-control" id="cardName" name="cardName">
-                                <input type="text" class="form-control" id="minutes" name="minutes">
-                                <textarea type="text" id="cardDescription" class="form-control" name="cardDescription"></textarea>
+                                <label style="width: 100%;">
+                                    Titel:
+                                    <input type="text" class="form-control" id="cardName" name="cardName" placeholder="Titel">
+                                </label>
+                                <label style="width: 100%;">
+                                    Duur(minuten):
+                                    <input type="number" class="form-control" id="minutes" name="minutes" placeholder="Duur">
+                                </label>
+                                <label style="width: 100%;">
+                                    Beschrijving:
+                                    <textarea type="text" id="cardDescription" class="form-control" name="cardDescription" placeholder="Beschrijving"></textarea>
+                                </label>
                             </form>
                         </div>
                         <div class="modal-footer">
