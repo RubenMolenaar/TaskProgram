@@ -8,6 +8,10 @@ if (isset($_POST['action'])) {
             $result = newList();
             echo $result;
             break;
+        case 'newCard':
+            $result = newCard();
+            echo $result;
+            break;
     }
 }
 function createDatabaseConnection (){
@@ -25,9 +29,18 @@ function createDatabaseConnection (){
     }
 }
 
-function getData(){
+function getCards(){
     $dbconnection = createDatabaseConnection();
     $stmt = $dbconnection->prepare("SELECT * FROM cards");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    $dbconnection = NULL;
+    return $result;
+}
+
+function getLists(){
+    $dbconnection = createDatabaseConnection();
+    $stmt = $dbconnection->prepare("SELECT * FROM lists");
     $stmt->execute();
     $result = $stmt->fetchAll();
     $dbconnection = NULL;
@@ -56,12 +69,14 @@ function newList(){
 
 function newCard(){
     $dbconnection = createDatabaseConnection();
-    $stmt = $dbconnection->prepare("INSERT INTO cards (name) VALUES (:cardName, :cardDescription);");
+    $stmt = $dbconnection->prepare("INSERT INTO cards (title, description, list_id, state_id, minutes) VALUES (:cardName, :cardDescription, :list_id, 1, :minutes);");
     $stmt->bindParam(":cardName", $_POST["cardName"]);
     $stmt->bindParam(":cardDescription", $_POST["cardDescription"]);
+    $stmt->bindParam(":minutes", $_POST["minutes"]);
+    $stmt->bindParam(":list_id", $_POST["list_id"]);
     $stmt->execute();
-    $stmt->lastInsertId();
-    $result = $stmt->fetch();
+    $id = $dbconnection->lastInsertId();
+    $result = getCardById($id);
     $dbconnection = NULL;
     return $result;
 }
