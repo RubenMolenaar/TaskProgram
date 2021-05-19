@@ -22,17 +22,18 @@ include("Database.php");
             <? 
                 $lists = getLists();
                 $cards = getCards();
+                $states = getStates();
                 
             ?>
             <div id="lists-div" style="maxwidth: 400px; overflow-x: scroll; display: flex ;">
 
                 <?php foreach($lists as $list): ?>
-                    <div class="lijst" style="display:inline-block;">
+                    <div class="lijst" style="display:inline-block; height: fit-content;">
                         <h5><?= $list['Name']; ?></h5>
                         <div class="newcontent" data-id="<?= $list['Id']?>">
                         <?foreach($cards as $card):?>
                             <?php if($card['List_Id'] == $list['Id']): ?>
-                                <div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;">
+                                <div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;" class="card-info" data-id="<?= $card['Id']?>">
                                     <p style="font-weight: bold; text-align: center;"><?= $card['Title'] ?></p>
                                     <p style="font-weight: bold; text-align: center;"><?= $card['Name'] ?></p>
                                 </div>
@@ -44,7 +45,7 @@ include("Database.php");
                 <?php endforeach; ?>
 
                 <button type="button" class="btn btn-primary" id="newlist-btn" data-toggle="modal" data-target="#new-list-modal">
-                    click me!
+                    Nieuwe lijst
                 </button>
             </div>
             
@@ -62,6 +63,35 @@ include("Database.php");
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="save-newlist" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal fade" id="card-info-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id='card-info-title'></h2>
+                            <button id='card-edit-btn' class="btn btn-warning">Bewerken</button>
+                        </div>
+                        <div class="modal-body">
+                            <input type='hidden' value='' id='card-info-id'>
+                            <label>status</label>
+                            <select id='card-info-status' class="form-control card-edit-enabled" disabled>
+                                <?php foreach($states as $state): ?>
+                                    <option value="<?= $state['Id']?>"><?= $state['Name']?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label>duur(Minuten)</label>
+                            <input id='card-info-minutes' type='text' class="form-control card-edit-enabled" disabled/>
+                            <label>beschrijving</label>
+                            <textarea id='card-info-description' class='card-edit-enabled' disabled style='width:100%;'></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                            <button type="button" id='card-save-btn' class="btn btn-success" id="" style="display: none;"><i class="fas fa-edit"></i>Opslaan</button>
                         </div>
                     </div>
 

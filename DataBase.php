@@ -12,6 +12,14 @@ if (isset($_POST['action'])) {
             $result = newCard();
             echo json_encode($result);
             break;
+        case 'GetCardInfo':
+            $result = getCardById($_POST['card_id']);
+            echo json_encode($result);
+            break;
+        case 'updateCard':
+            $result = updateCard();
+            echo json_encode($result);
+            break;
     }
 }
 function createDatabaseConnection (){
@@ -31,7 +39,7 @@ function createDatabaseConnection (){
 
 function getCards(){
     $dbconnection = createDatabaseConnection();
-    $stmt = $dbconnection->prepare("SELECT cards.*, states.* FROM cards left join states on cards.State_Id=states.Id");
+    $stmt = $dbconnection->prepare("SELECT cards.*, states.Name FROM cards left join states on cards.State_Id=states.Id");
     $stmt->execute();
     $result = $stmt->fetchAll();
     $dbconnection = NULL;
@@ -47,9 +55,18 @@ function getLists(){
     return $result;
 }
 
+function getStates(){
+    $dbconnection = createDatabaseConnection();
+    $stmt = $dbconnection->prepare("SELECT * FROM states");
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    $dbconnection = NULL;
+    return $result;
+}
+
 function getCardById($id){
     $dbconnection = createDatabaseConnection();
-    $stmt = $dbconnection->prepare("SELECT cards.*, states.* FROM cards left join states on cards.State_Id=states.Id Where cards.Id = :id LIMIT 1", );
+    $stmt = $dbconnection->prepare("SELECT cards.*, states.Name FROM cards left join states on cards.State_Id=states.Id Where cards.Id = :id LIMIT 1", );
     $stmt->bindParam(":id", $id);
     $stmt->execute();
     $result = $stmt->fetch();
@@ -98,6 +115,17 @@ function insertData(){
     $stmt->execute();
     $stmt->lastInsertId();
     $result = $stmt->fetch();
+    $dbconnection = NULL;
+    return $result;
+}
+
+function updateCard(){
+    $dbconnection = createDatabaseConnection();
+    $stmt = $dbconnection->prepare("UPDATE cards SET Description=':cardDescription', Minutes=':minutes' WHERE id=:id");                                    
+    $stmt->bindParam(":cardDescription", $_POST["cardDescription"]);
+    $stmt->bindParam(":minutes", $_POST["cardMinutes"]);
+    $stmt->bindParam(":id", $_POST["cardId"]);
+    $stmt->execute();
     $dbconnection = NULL;
     return $result;
 }
