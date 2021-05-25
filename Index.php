@@ -90,6 +90,7 @@ include("Database.php");
                             <textarea id='card-info-description' class='card-edit-enabled' disabled style='width:100%;'></textarea>
                         </div>
                         <div class="modal-footer">
+                            <button class="RemoveBtn btn-danger">X</button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                             <button type="button" id='card-save-btn' class="btn btn-success" id="" style="display: none;"><i class="fas fa-edit"></i>Opslaan</button>
                         </div>

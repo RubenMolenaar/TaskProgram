@@ -28,7 +28,8 @@ $(document).ready(function(){
                 $('#card-info-minutes').val('' +  data['Minutes'])
                 $('#card-info-id').val('' +  data['Id'])
                 $('#card-info-status option').each(function(){
-                    $(this).prop('selected', false);
+                    $(this).removeAttr('selected');
+                    console.log($(this));
                     if($(this).val() == data['State_Id']){
                         console.log($(this).val());
                         $(this).attr('selected','selected');
@@ -58,6 +59,14 @@ $(document).ready(function(){
             $(this).val('')
         });
     })
+    
+
+    $('#card-info-modal').on('hidden.bs.modal', function(){
+        $('#card-save-btn').css('display','none')
+        $('.card-edit-enabled').each(function(){
+            $(this).prop("disabled", true);
+        })
+    })
 
     $(document).on('click', '#card-edit-btn', function(){
         $('#card-save-btn').css('display','block')
@@ -67,15 +76,19 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#card-save-btn', function(){
-    var senddata = { action: "updateCard", cardId: $('#card-info-Id').val(), cardDescription: $('#card-info-description').val(), cardMinutes: $('#card-info-minutes').val(), cardState_Id: $('#card-info-status').val()}
-        $.ajax({
-            type: 'POST',
-            url: 'DataBase.php',
-            data: senddata, 
-            dataType: "json",
-            success: function(data){
-
-            }      
+    var senddata = { action: "updateCard", cardId: $('#card-info-id').val(), cardDescription: $('#card-info-description').val(), cardMinutes: $('#card-info-minutes').val(), cardState_Id: $('#card-info-status').val()}
+    console.log(senddata)
+    $.ajax({
+        type: 'POST',
+        url: 'DataBase.php',
+        data: senddata, 
+        dataType: "json",
+        error: function(data){
+            console.log(data)
+        },  
+        success: function(data){
+            window.location.reload();
+        }    
         })
     })
 

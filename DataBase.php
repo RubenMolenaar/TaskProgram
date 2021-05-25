@@ -121,10 +121,11 @@ function insertData(){
 
 function updateCard(){
     $dbconnection = createDatabaseConnection();
-    $stmt = $dbconnection->prepare("UPDATE cards SET Description=':cardDescription', Minutes=':minutes' WHERE id=:id");                                    
+    $stmt = $dbconnection->prepare("UPDATE cards SET State_Id=:state_id, Description=:cardDescription, Minutes=:minutes WHERE id=:id");                                    
     $stmt->bindParam(":cardDescription", $_POST["cardDescription"]);
     $stmt->bindParam(":minutes", $_POST["cardMinutes"]);
     $stmt->bindParam(":id", $_POST["cardId"]);
+    $stmt->bindParam(":state_id", $_POST["cardState_Id"]);
     $stmt->execute();
     $dbconnection = NULL;
     return $result;
