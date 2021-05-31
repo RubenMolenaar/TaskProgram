@@ -29,12 +29,12 @@ $(document).ready(function(){
                 $('#card-info-id').val('' +  data['Id'])
                 $('#card-info-status option').each(function(){
                     $(this).removeAttr('selected');
-                    console.log($(this));
                     if($(this).val() == data['State_Id']){
-                        console.log($(this).val());
                         $(this).attr('selected','selected');
                     }
                 })
+                $('#card-delete').data('id', data['Id']);
+                console.log($('#card-delete').data('id'))
             }      
         })
     })
@@ -76,22 +76,54 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#card-save-btn', function(){
-    var senddata = { action: "updateCard", cardId: $('#card-info-id').val(), cardDescription: $('#card-info-description').val(), cardMinutes: $('#card-info-minutes').val(), cardState_Id: $('#card-info-status').val()}
-    console.log(senddata)
-    $.ajax({
-        type: 'POST',
-        url: 'DataBase.php',
-        data: senddata, 
-        dataType: "json",
-        error: function(data){
-            console.log(data)
-        },  
-        success: function(data){
-            window.location.reload();
-        }    
+        var senddata = { action: "updateCard", cardId: $('#card-info-id').val(), cardDescription: $('#card-info-description').val(), cardMinutes: $('#card-info-minutes').val(), cardState_Id: $('#card-info-status').val()}
+        $.ajax({
+            type: 'POST',
+            url: 'DataBase.php',
+            data: senddata, 
+            dataType: "json",
+            error: function(data){
+                console.log(data)
+            },  
+            success: function(data){
+                window.location.reload();
+            }    
         })
     })
 
+    $(document).on('click', '#card-delete', function(){
+        console.log($(this).data('id'));
+        var senddata = { action: "deleteCard", cardId: $(this).data('id')}
+        $.ajax({
+            type: 'POST',
+            url: 'DataBase.php',
+            data: senddata, 
+            dataType: "json",
+            error: function(data){
+                console.log(data)
+            },  
+            success: function(data){
+                window.location.reload();
+            }    
+        })
+    })
+    
+    $(document).on('click', '#list-delete', function(){
+        console.log($(this).data('id'));
+        var senddata = { action: "deleteList", listId: $(this).data('id')}
+        $.ajax({
+            type: 'POST',
+            url: 'DataBase.php',
+            data: senddata, 
+            dataType: "json",
+            error: function(data){
+                console.log(data)
+            },  
+            success: function(data){
+                window.location.reload();
+            }    
+        })
+    })
 
 
 })

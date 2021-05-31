@@ -20,6 +20,14 @@ if (isset($_POST['action'])) {
             $result = updateCard();
             echo json_encode($result);
             break;
+        case 'deleteCard':
+            $result = deleteCard();
+            echo json_encode($result);
+            break;
+        case 'deleteList':
+            $result = deleteList();
+            echo json_encode($result);
+            break;
     }
 }
 function createDatabaseConnection (){
@@ -109,7 +117,7 @@ function insertData(){
     $stmt = $dbconnection->prepare("INSERT INTO planned (name, date, length, explainer, players) VALUES (:ja, :nee, :zeker, :denk, :ik);");
     $stmt->bindParam(":ja", $name);
     $stmt->bindParam(":nee", $date);
-    $stmt->bindParam(":zeker", $length);//datum colom
+    $stmt->bindParam(":zeker", $length);
     $stmt->bindParam(":denk", $explain);
     $stmt->bindParam(":ik", $players);
     $stmt->execute();
@@ -126,6 +134,24 @@ function updateCard(){
     $stmt->bindParam(":minutes", $_POST["cardMinutes"]);
     $stmt->bindParam(":id", $_POST["cardId"]);
     $stmt->bindParam(":state_id", $_POST["cardState_Id"]);
+    $stmt->execute();
+    $dbconnection = NULL;
+    return $result;
+}
+
+function deleteCard(){
+    $dbconnection = createDatabaseConnection();
+    $stmt = $dbconnection->prepare("DELETE FROM cards WHERE Id=:id;");                                    
+    $stmt->bindParam(":id", $_POST["cardId"]);
+    $stmt->execute();
+    $dbconnection = NULL;
+    return $result;
+}
+
+function deleteList(){
+    $dbconnection = createDatabaseConnection();
+    $stmt = $dbconnection->prepare("DELETE FROM lists WHERE Id=:id;");                                    
+    $stmt->bindParam(":id", $_POST["listId"]);
     $stmt->execute();
     $dbconnection = NULL;
     return $result;

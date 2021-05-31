@@ -23,13 +23,13 @@ include("Database.php");
                 $lists = getLists();
                 $cards = getCards();
                 $states = getStates();
-                
             ?>
             <div id="lists-div" style="maxwidth: 400px; overflow-x: scroll; display: flex ;">
 
                 <?php foreach($lists as $list): ?>
                     <div class="lijst" style="display:inline-block; height: fit-content;">
-                        <h5><?= $list['Name']; ?></h5>
+                        <h5 style="display: inline-block ;"><?= $list['Name']; ?></h5>
+                        <button style="display: inline-block ;float:right;" class="btn btn-danger" id="list-delete" data-id="<?= $list['Id']; ?>">x</button>
                         <div class="newcontent" data-id="<?= $list['Id']?>">
                         <?foreach($cards as $card):?>
                             <?php if($card['List_Id'] == $list['Id']): ?>
@@ -90,7 +90,7 @@ include("Database.php");
                             <textarea id='card-info-description' class='card-edit-enabled' disabled style='width:100%;'></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button class="RemoveBtn btn-danger">X</button>
+                            <button id="card-delete" class="btn btn-danger">verwijderen</button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                             <button type="button" id='card-save-btn' class="btn btn-success" id="" style="display: none;"><i class="fas fa-edit"></i>Opslaan</button>
                         </div>
