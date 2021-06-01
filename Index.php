@@ -1,6 +1,8 @@
 <?php
-include("Database.php");
-
+    include("Database.php");
+    $lists = getLists();
+    $cards = getCards();
+    $states = getStates();
 ?>
 
 <!DOCTYPE html>
@@ -18,12 +20,27 @@ include("Database.php");
 <header class="header">
     <h1 id="header-text">veel leuker dan trello</h1>
 </header>
+<div style="width: 100%; background-color: white; font-weight: bold; margin-left: 0px; margin-bottom: 15px;">
+    <h5 style=" margin-left: 15px; display: inline-block;">filters:</h5>
+    <button class="btn btn-success" style="display: inline-block; float: right;">filteren</button>
+    <div class="row" style="margin: 15px;">
+        <div class="col-md-6">
+            <label style="inline-block">status:</label>
+            <select style="inline-block" class="form-control" id="">
+                <option value="false">Geen filter</option>
+                <? foreach($states as $state): ?>
+                    <option value="<?= $state["Id"]?>"><?= $state["Name"] ?></option>
+                <? endforeach; ?>
+            <select>
+        </div>
+        <div class="col-md-6">
+            <label style="inline-block">minuten:</label>
+            <input type="number" style="inline-block" class="form-control" id="minutes-filter" placeholder="minuten"/>
+        </div>
+    </div>
+</div>
 
-            <? 
-                $lists = getLists();
-                $cards = getCards();
-                $states = getStates();
-            ?>
+            
             <div id="lists-div" style="maxwidth: 400px; overflow-x: scroll; display: flex ;">
 
                 <?php foreach($lists as $list): ?>
@@ -31,14 +48,16 @@ include("Database.php");
                         <h5 style="display: inline-block ;"><?= $list['Name']; ?></h5>
                         <button style="display: inline-block ;float:right;" class="btn btn-danger" id="list-delete" data-id="<?= $list['Id']; ?>">x</button>
                         <div class="newcontent" data-id="<?= $list['Id']?>">
-                        <?foreach($cards as $card):?>
-                            <?php if($card['List_Id'] == $list['Id']): ?>
-                                <div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;" class="card-info" data-id="<?= $card['Id']?>">
-                                    <p style="font-weight: bold; text-align: center;"><?= $card['Title'] ?></p>
-                                    <p style="font-weight: bold; text-align: center;"><?= $card['Name'] ?></p>
-                                </div>
-                            <?php endif; ?>
-                        <? endforeach; ?>
+                        <?if($_GET['state_filter'] != null):?>
+                            <?foreach($cards as $card):?>
+                                <?php if($card['List_Id'] == $list['Id']): ?>
+                                    <div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;" class="card-info" data-id="<?= $card['Id']?>">
+                                        <p style="font-weight: bold; text-align: center;"><?= $card['Title'] ?></p>
+                                        <p style="font-weight: bold; text-align: center;"><?= $card['Name'] ?></p>
+                                    </div>
+                                <?php endif; ?>
+                            <? endforeach; ?>
+                        <??>
                         </div>
                         <button data-id="<?= $list['Id'] ?>" type="button" class="btnnewcontent" id="newcard-btn" data-toggle="modal" data-target="#new-card-modal"><i class="fas fa-plus-square"></i> add new content </button>
                     </div>
