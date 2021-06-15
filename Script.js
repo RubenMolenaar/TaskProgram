@@ -2,7 +2,7 @@ $(document).ready(function(){
     $('#new-list-modal').on('click', '#save-newlist', function () {
         var senddata = { action: "newList", listName: $('#listName').val() }
         $.post('DataBase.php', senddata ,function(data){
-            $('<div class="lijst" style="display:inline-block;  height: fit-content;"><h5>'+ $('#listName').val() + '</h5><div data-id="'+ data +'" class="newcontent"></div><button data-id="'+ data +'" type="button" class="btnnewcontent" id="newcard-btn" data-toggle="modal" data-target="#new-card-modal"><i class="fas fa-plus-square"></i> add new content </button></div></label>').insertBefore('#newlist-btn')  
+            $('<div class="lijst" style="display:inline-block;  height: fit-content;"><h5 style="display:inline-block;">'+ $('#listName').val() + '</h5><button style="display: inline-block ;float:right;" class="btn btn-danger" id="list-delete" data-id="'+ data +'">x</button><div data-id="'+ data +'" class="newcontent"></div><button data-id="'+ data +'" type="button" class="btnnewcontent" id="newcard-btn" data-toggle="modal" data-target="#new-card-modal"><i class="fas fa-plus-square"></i> add new content </button></div></label>').insertBefore('#newlist-btn')  
             $('#new-list-modal').modal('hide')        
         })
     })
@@ -68,6 +68,12 @@ $(document).ready(function(){
         })
     })
 
+    $('#new-list-modal').on('hidden.bs.modal', function(){
+        $('#new-list-modal :input').each(function(){
+            $(this).val('')
+        });
+    })
+
     $(document).on('click', '#card-edit-btn', function(){
         $('#card-save-btn').css('display','block')
         $('.card-edit-enabled').each(function(){
@@ -123,6 +129,10 @@ $(document).ready(function(){
                 window.location.reload();
             }    
         })
+    })
+
+    $('#state-filter').on('change', function(){
+        window.location.href = window.location.pathname + "?status=" + $(this).val();
     })
 
 

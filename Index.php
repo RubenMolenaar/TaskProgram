@@ -3,6 +3,15 @@
     $lists = getLists();
     $cards = getCards();
     $states = getStates();
+    if($_GET['status'] && $_GET['status'] != "false"){
+        $tempcards = [];
+        foreach($cards as $card){
+            if ($card['State_Id'] == $_GET['status']){
+                array_push($tempcards, $card);
+            }
+        }
+        $cards = $tempcards;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -22,48 +31,40 @@
 </header>
 <div style="width: 100%; background-color: white; font-weight: bold; margin-left: 0px; margin-bottom: 15px;">
     <h5 style=" margin-left: 15px; display: inline-block;">filters:</h5>
-    <button class="btn btn-success" style="display: inline-block; float: right;">filteren</button>
     <div class="row" style="margin: 15px;">
         <div class="col-md-6">
             <label style="inline-block">status:</label>
-            <select style="inline-block" class="form-control" id="">
+            <select style="inline-block" class="form-control" id="state-filter">
                 <option value="false">Geen filter</option>
                 <? foreach($states as $state): ?>
-                    <option value="<?= $state["Id"]?>"><?= $state["Name"] ?></option>
+                    <option value="<?= $state["Id"]?>" <?if($state["Id"] == $_GET['status']){ echo "Selected";}?>><?= $state["Name"] ?></option>
                 <? endforeach; ?>
             <select>
-        </div>
-        <div class="col-md-6">
-            <label style="inline-block">minuten:</label>
-            <input type="number" style="inline-block" class="form-control" id="minutes-filter" placeholder="minuten"/>
         </div>
     </div>
 </div>
 
             
             <div id="lists-div" style="maxwidth: 400px; overflow-x: scroll; display: flex ;">
-
-                <?php foreach($lists as $list): ?>
-                    <div class="lijst" style="display:inline-block; height: fit-content;">
-                        <h5 style="display: inline-block ;"><?= $list['Name']; ?></h5>
-                        <button style="display: inline-block ;float:right;" class="btn btn-danger" id="list-delete" data-id="<?= $list['Id']; ?>">x</button>
-                        <div class="newcontent" data-id="<?= $list['Id']?>">
-                        <?if($_GET['state_filter'] != null):?>
-                            <?foreach($cards as $card):?>
-                                <?php if($card['List_Id'] == $list['Id']): ?>
-                                    <div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;" class="card-info" data-id="<?= $card['Id']?>">
-                                        <p style="font-weight: bold; text-align: center;"><?= $card['Title'] ?></p>
-                                        <p style="font-weight: bold; text-align: center;"><?= $card['Name'] ?></p>
-                                    </div>
-                                <?php endif; ?>
-                            <? endforeach; ?>
-                        <??>
+                
+                    <?php foreach($lists as $list): ?>
+                        <div class="lijst" style="display:inline-block; height: fit-content;">
+                            <h5 style="display: inline-block ;"><?= $list['Name']; ?></h5>
+                            <button style="display: inline-block ;float:right;" class="btn btn-danger" id="list-delete" data-id="<?= $list['Id']; ?>">x</button>
+                            <div class="newcontent" data-id="<?= $list['Id']?>">
+                                <?foreach($cards as $card):?>
+                                    <?php if($card['List_Id'] == $list['Id']): ?>
+                                        <div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;" class="card-info" data-id="<?= $card['Id']?>">
+                                            <p style="font-weight: bold; text-align: center;"><?= $card['Title'] ?></p>
+                                            <p style="font-weight: bold; text-align: center;"><?= $card['Name'] ?></p>
+                                        </div>
+                                    <?php endif; ?>
+                                <? endforeach; ?>
+                            </div>
+                            <button data-id="<?= $list['Id'] ?>" type="button" class="btnnewcontent" id="newcard-btn" data-toggle="modal" data-target="#new-card-modal"><i class="fas fa-plus-square"></i> add new content </button>
                         </div>
-                        <button data-id="<?= $list['Id'] ?>" type="button" class="btnnewcontent" id="newcard-btn" data-toggle="modal" data-target="#new-card-modal"><i class="fas fa-plus-square"></i> add new content </button>
-                    </div>
-                <?php endforeach; ?>
-
-                <button type="button" class="btn btn-primary" id="newlist-btn" data-toggle="modal" data-target="#new-list-modal">
+                    <?php endforeach; ?>
+                <button type="button" class="btn btn-primary" id="newlist-btn" data-toggle="modal" data-target="#new-list-modal" style="height: 75px;">
                     Nieuwe lijst
                 </button>
             </div>
@@ -73,15 +74,16 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <label for="fname">What is the title of your new list?</label>
+                            <label for="fname">Nieuwe lijst</label>
                         </div>
                         <div class="modal-body">
                             <form id="newlist-form">
-                                <input type="text" id="listName" name="listName">
+                                <label for="listName">Naam:</label>
+                                <input type="text" id="listName" name="listName" class="form-control">
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="save-newlist" class="btn btn-success">Save</button>
+                            <button type="button" id="save-newlist" class="btn btn-success">Opslaan</button>
                         </div>
                     </div>
 
