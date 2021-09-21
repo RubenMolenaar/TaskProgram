@@ -47,6 +47,9 @@ $(document).ready(function(){
             url: 'DataBase.php',
             data: senddata, 
             dataType: "json",
+            error: function(data){
+                console.log(data)
+            },  
             success: function(data){
                 $('.newcontent[data-id="'+ data['List_Id'] +'"]').append('<div style="background-color: white;width: 229px;border: solid 1px #000;padding: 5px;" class="card-info" data-id="'+ data['Id'] +'"><p style="font-weight: bold; text-align: center;">' + data['Title'] + '</p><p style="font-weight: bold; text-align: center;">' +  data['Name'] + '</p></div>')
                 $('#new-card-modal').modal('hide')
@@ -82,7 +85,13 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#card-save-btn', function(){
-        var senddata = { action: "updateCard", cardId: $('#card-info-id').val(), cardDescription: $('#card-info-description').val(), cardMinutes: $('#card-info-minutes').val(), cardState_Id: $('#card-info-status').val()}
+        var senddata = { 
+            action: "updateCard", 
+            cardId: $('#card-info-id').val(), 
+            cardDescription: $('#card-info-description').val(), 
+            cardMinutes: $('#card-info-minutes').val(), 
+            cardState_Id: $('#card-info-status').val()
+        }
         $.ajax({
             type: 'POST',
             url: 'DataBase.php',
@@ -91,7 +100,7 @@ $(document).ready(function(){
             error: function(data){
                 console.log(data)
             },  
-            success: function(data){
+            success: function(){
                 window.location.reload();
             }    
         })
@@ -108,7 +117,7 @@ $(document).ready(function(){
             error: function(data){
                 console.log(data)
             },  
-            success: function(data){
+            success: function(){
                 window.location.reload();
             }    
         })
@@ -127,7 +136,7 @@ $(document).ready(function(){
             },  
             success: function(data){
                 window.location.reload();
-            }    
+            }
         })
     })
 

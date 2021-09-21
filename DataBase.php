@@ -7,7 +7,7 @@ if (isset($_POST['action'])) {
         case 'newList':
             $result = newList();
             echo $result;
-            break;
+            break;  
         case 'newCard':
             $result = newCard();
             echo json_encode($result);
@@ -35,7 +35,6 @@ function createDatabaseConnection (){
     $username = "root";
     $password = "mysql";
     $dbname = "year2week3_4";
-
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -149,8 +148,13 @@ function deleteCard(){
 }
 
 function deleteList(){
+
+
     $dbconnection = createDatabaseConnection();
     $stmt = $dbconnection->prepare("DELETE FROM lists WHERE Id=:id;");                                    
+    $stmt->bindParam(":id", $_POST["listId"]);
+    $stmt->execute();
+    $stmt = $dbconnection->prepare("DELETE FROM cards WHERE List_Id=:id;");                                    
     $stmt->bindParam(":id", $_POST["listId"]);
     $stmt->execute();
     $dbconnection = NULL;
